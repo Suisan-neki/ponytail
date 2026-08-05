@@ -1,28 +1,20 @@
 #!/usr/bin/env node
 // Generate the OpenClaw / ClawHub skill package (.openclaw/skills/) from the
-// canonical skills/. OpenClaw skills are SKILL.md (frontmatter + body), the same
-// format ponytail already uses, with one difference: `description` must be a
-// single line under 160 chars. The canonical descriptions are long (tuned for
-// Claude's skill picker), so each ships a short one here. The body is copied
-// verbatim from skills/<name>/SKILL.md so the ruleset never drifts; only the
-// frontmatter is rewritten.
-//
-// Run:  node scripts/build-openclaw-skills.js
-// tests/openclaw-skills.test.js fails if the committed copies are stale.
+// canonical skills/. OpenClaw descriptions must be one line under 160 chars.
 
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const HOMEPAGE = 'https://github.com/DietrichGebert/ponytail';
+const HOMEPAGE = 'https://github.com/Suisan-neki/ponytail';
 
 const DESCRIPTIONS = {
-  'ponytail': 'Lazy senior dev mode for any coding task (write, refactor, fix, review): YAGNI, stdlib first, no unrequested abstractions. Not for non-coding requests.',
-  'ponytail-review': 'Review a diff for over-engineering. Finds what to delete: reinvented stdlib, needless deps, speculative abstractions. One line per finding.',
-  'ponytail-audit': 'Audit the whole repo for over-engineering. A ranked list of what to delete, simplify, or replace with stdlib or native features.',
-  'ponytail-debt': 'Harvest every ponytail: shortcut comment into one debt ledger, so deferrals get tracked instead of forgotten. One-shot report.',
-  'ponytail-gain': 'Show ponytail measured impact as a scoreboard: less code, less cost, more speed, from the benchmark medians. One-shot display.',
-  'ponytail-help': "Quick reference for ponytail's modes, skills, and commands. One-shot display.",
+  'ponytail': 'コーディング全般でYAGNI、stdlib、native機能を優先し、不要な抽象化を避ける怠け者のシニア開発者mode。',
+  'ponytail-review': 'diffの過剰設計をreviewし、再実装、不要なdependency、推測的な抽象化などの削除候補を1行ずつ示す。',
+  'ponytail-audit': 'repository全体の過剰設計をauditし、削除・簡素化・stdlibやnative機能への置換候補を優先順で示す。',
+  'ponytail-debt': 'すべてのponytail: shortcut commentをdebt ledgerへ集め、先送りを追跡する一回限りのreport。',
+  'ponytail-gain': '公開benchmarkに基づくcode量、cost、速度への効果をscoreboardで示す一回限りの表示。',
+  'ponytail-help': 'Ponytailのmode、skill、commandを一覧するquick reference。',
 };
 
 const NAMES = Object.keys(DESCRIPTIONS);

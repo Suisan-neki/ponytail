@@ -1,14 +1,14 @@
 {
   "name": "ponytail",
   "interface": {
-    "displayName": "Ponytail"
+    "displayName": "Ponytail 日本語版"
   },
   "plugins": [
     {
       "name": "ponytail",
       "source": {
         "source": "url",
-        "url": "https://github.com/DietrichGebert/ponytail.git",
+        "url": "https://github.com/Suisan-neki/ponytail.git",
         "ref": "main"
       },
       "policy": {

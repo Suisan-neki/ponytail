@@ -1,29 +1,29 @@
 {
   "name": "ponytail",
   "version": "4.8.4",
-  "description": "Lazy senior dev mode. Forces the simplest, shortest solution that actually works: YAGNI, stdlib first, no unrequested abstractions.",
+  "description": "日本語で使える、余計な実装を避けるシニア開発者mode。YAGNI、既存実装、標準ライブラリ、native機能を優先し、最小の正しいdiffを選びます。",
   "author": {
     "name": "Dietrich Gebert",
     "url": "https://github.com/DietrichGebert"
   },
-  "homepage": "https://github.com/DietrichGebert/ponytail",
-  "repository": "https://github.com/DietrichGebert/ponytail",
+  "homepage": "https://github.com/Suisan-neki/ponytail",
+  "repository": "https://github.com/Suisan-neki/ponytail",
   "license": "MIT",
-  "keywords": ["yagni", "minimalism", "code-review", "productivity"],
+  "keywords": ["yagni", "minimalism", "code-review", "productivity", "japanese", "codex"],
   "skills": "./skills/",
   "hooks": "./hooks/claude-codex-hooks.json",
   "interface": {
-    "displayName": "Ponytail",
-    "shortDescription": "Lazy senior developer mode",
-    "longDescription": "Prefer YAGNI, the standard library, native platform features, and the smallest correct implementation.",
-    "developerName": "Dietrich Gebert",
+    "displayName": "Ponytail 日本語版",
+    "shortDescription": "最小の正しい実装を選ぶmode",
+    "longDescription": "変更対象を理解した後、YAGNI、既存実装、標準ライブラリ、native機能、導入済み依存関係の順に確認し、要件を満たす最小の正しいdiffを選びます。",
+    "developerName": "Dietrich Gebert（日本語版: Suisan-neki）",
     "category": "Productivity",
     "capabilities": ["Instructions", "Lifecycle hooks"],
-    "websiteURL": "https://github.com/DietrichGebert/ponytail",
+    "websiteURL": "https://github.com/Suisan-neki/ponytail",
     "defaultPrompt": [
-      "Use Ponytail mode for this task.",
-      "Review this diff for over-engineering.",
-      "Find the smallest correct implementation."
+      "このタスクをPonytail fullで進めてください。変更対象と呼び出し経路を確認してから、要件を満たす最小の正しいdiffを選び、日本語で結果を報告してください。",
+      "このdiffを@ponytail-reviewで確認し、過剰設計として削れる箇所だけを行番号付きで示してください。",
+      "既存実装、標準ライブラリ、native機能の順に確認し、新規依存を増やさずに実装してください。"
     ],
     "brandColor": "#111111",
     "composerIcon": "./assets/logo.png",
