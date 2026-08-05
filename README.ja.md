@@ -12,12 +12,13 @@
 > [!NOTE]
 > これは [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) の非公式日本語forkです。MIT Licenseに基づき、原著作者の著作権表示とライセンスを保持しています。
 
-Ponytailは、AI coding agentへ「余計なものを作らないシニア開発者」の判断基準を追加するpluginです。単に短いcodeを書かせるのではありません。問題を理解したうえで、YAGNI、既存実装、標準ライブラリ、platform標準機能、導入済みdependencyの順に確認し、それでも必要な場合だけ最小実装を書かせます。
+Ponytailは、AI coding agentへ「余計なものを作らないシニア開発者」の判断基準を追加するpluginです。単に短いcodeを書かせるものではありません。問題と変更経路を理解したうえで、YAGNI、既存実装、標準ライブラリ、platform標準機能、導入済みdependencyの順に確認し、それでも必要な場合だけ最小の正しい実装を書かせます。
 
 ## 何が日本語化されているか
 
 - `AGENTS.md`と主要agent向けrule copy
 - `ponytail`、`review`、`audit`、`debt`、`gain`、`help`の6skill
+- Codex pluginの表示名、説明、初期prompt、marketplace source
 - OpenClaw向けに生成されるskill本文
 - rule copyの同期を確認するtest用invariant
 
@@ -32,12 +33,56 @@ command名、mode名、`ponytail:` commentなど、pluginが識別に使う文�
 4. platform標準機能でできるか    → 使う
 5. 導入済みdependencyでできるか  → 使う
 6. 1行で書けるか                 → 1行にする
-7. それでも必要なら               → 動作する最小限を書く
+7. それでも必要なら              → 動作する最小限を書く
 ```
 
 これは調査を省くための順番ではありません。変更対象と実際の処理を読んだ後に使います。入力検証、データ損失を防ぐerror handling、security、accessibility、実機calibrationは削りません。
 
 ## Install
+
+### Codex
+
+hookの実行にNode.jsを使います。`node --version`が通る状態で、次を実行してください。
+
+```bash
+codex plugin marketplace add Suisan-neki/ponytail
+codex plugin add ponytail@ponytail
+```
+
+続けてCodexを起動します。
+
+```bash
+codex
+```
+
+`/hooks`を開き、Ponytailのlifecycle hookを確認して信頼します。その後、新しいthreadを開始してください。既定の`full` modeがsession開始時に有効になります。
+
+動作確認は、Codexのpromptで次を実行します。
+
+```text
+@ponytail-help
+```
+
+または、通常の開発依頼に`@ponytail`を付けます。
+
+```text
+@ponytail このバグを直して。変更対象と呼び出し元を確認してから、最小の正しいdiffにして。
+```
+
+Codexでよく使う呼び出し方：
+
+| Prompt | 動作 |
+|---|---|
+| `@ponytail` | 現在のmodeを確認し、Ponytailを使う |
+| `@ponytail lite` | 依頼どおり実装し、より小さい代案を1行で示す |
+| `@ponytail full` | 標準ライブラリとnative機能を優先し、最小の正しいdiffを選ぶ |
+| `@ponytail ultra` | YAGNIを強く適用し、要件自体も問い直す |
+| `@ponytail-review` | diffを過剰設計の観点だけでreviewする |
+| `@ponytail-help` | Codexでの使い方を表示する |
+| `@ponytail off` | 現在のsessionで解除する |
+| `@ponytail default ultra` | 新しいsessionの既定modeを変更する |
+
+Ponytailは短いcodeを目的にするのではなく、不要な実装を避けます。security、validation、データ損失を防ぐ処理、明示要件まで削って短くする動作は対象外です。
 
 ### Claude Code
 
@@ -52,15 +97,6 @@ command名、mode名、`ponytail:` commentなど、pluginが識別に使う文�
 ```
 
 Claude Code Desktopでも、Code tabのprompt欄へ同じcommandを入力できます。
-
-### Codex
-
-```bash
-codex plugin marketplace add Suisan-neki/ponytail
-codex plugin add ponytail@ponytail
-```
-
-`codex`を起動して`/hooks`を開き、2つのlifecycle hookを確認して信頼します。その後、新しいthreadを開始します。
 
 ### Gemini CLI
 
@@ -79,22 +115,6 @@ forkをcheckoutし、`opencode.json`からplugin fileを指定します。
 ```
 
 相対pathを使う場合は、各projectの`opencode.json`から見たpathにします。
-
-## 使い方
-
-既定は`full`で、session開始時から有効です。
-
-| Command | 動作 |
-|---|---|
-| `/ponytail lite` | 依頼どおり実装し、より小さい代案を1行で示す |
-| `/ponytail` | 最小実装を既定として選ぶ |
-| `/ponytail ultra` | YAGNIを強く適用し、要件自体も問い直す |
-| `/ponytail-review` | diffから過剰設計を探す |
-| `/ponytail-audit` | repository全体から削除候補を探す |
-| `/ponytail-debt` | `ponytail:` commentをledger化する |
-| `/ponytail-help` | command一覧を表示する |
-
-解除は「stop ponytail」「normal mode」または`/ponytail off`。
 
 ## 既定mode
 
