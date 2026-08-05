@@ -29,12 +29,12 @@ const REUSED_SKILLS = ['skills/ponytail/SKILL.md'];
 // Claude/Codex hook map uses events Gemini does not support, so it must stay
 // behind the host-specific plugin manifests instead.
 const GEMINI_AUTO_HOOKS = 'hooks/hooks.json';
-// Same load-bearing phrases asserted by scripts/check-rule-copies.js: the file
-// contextFileName points at must actually carry the rules, not just exist.
+// scripts/check-rule-copies.jsと同じ考え方で、contextFileNameが指すfileに
+// 日本語版の重要ruleが実際に残っていることを確認する。
 const RULE_INVARIANTS = [
-  'lazy senior',
-  'input validation at trust boundaries',
-  'naive heuristic',
+  '余計なものを作らないシニア開発者',
+  '信頼境界での入力検証',
+  '単純なヒューリスティック',
 ];
 
 function read(relPath) {
