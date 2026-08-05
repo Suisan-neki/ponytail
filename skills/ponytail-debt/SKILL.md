@@ -1,44 +1,33 @@
 ---
 name: ponytail-debt
 description: >
-  Harvest every `ponytail:` comment in the codebase into a debt ledger, so the
-  deliberate shortcuts and deferrals ponytail leaves behind get tracked instead
-  of rotting into "later means never". Use when the user says "ponytail debt",
-  "/ponytail-debt", "what did ponytail defer", "list the shortcuts", "ponytail
-  ledger", or "what did we mark to do later". One-shot report, changes nothing.
+  codebase内の`ponytail:` commentを集め、意図的に採用した簡略化や先送りをdebt ledgerにする。
+  「ponytail debt」「何を先送りしたか」「shortcut一覧」または/ponytail-debtで使う。
+  読み取り専用の一回限りのreportで、codeは変更しない。
 ---
 
-Every deliberate ponytail shortcut is marked with a `ponytail:` comment naming
-its ceiling and upgrade path. This collects them into one ledger so a deferral
-can't quietly become permanent.
+意図的に限界のあるPonytailの簡略化には、`ponytail:` commentで限界と見直す条件を書きます。このskillはそれらを1つのledgerへ集め、先送りが「いつか」のまま放置されるのを防ぎます。
 
-## Scan
+## 走査
 
-Grep the repo for comment markers, skipping `node_modules`, `.git`, and build
-output:
+`node_modules`、`.git`、build outputを除き、comment markerを検索します。
 
-`grep -rnE '(#|//) ?ponytail:' .`  (add other comment prefixes if your stack uses them)
+`grep -rnE '(#|//) ?ponytail:' .`
 
-Each hit is one ledger row. The comment prefix keeps prose that merely mentions
-the convention out of the ledger.
+利用中の言語に別のcomment prefixがある場合は追加します。comment prefixを条件にすることで、規約を説明する文書中の単なる`ponytail:`言及を除外します。
 
-## Output
+## 出力
 
-One row per marker, grouped by file:
+fileごとにまとめ、marker1件につき1行にします。
 
-`<file>:<line>, <what was simplified>. ceiling: <the limit named>. upgrade: <the trigger to revisit>.`
+`<file>:<line>, <簡略化したもの>。ceiling: <限界>。upgrade: <見直す条件>。`
 
-The convention is `ponytail: <ceiling>, <upgrade path>`, so pull the ceiling
-and the trigger straight from the comment. Want an owner per row too? add
-`git blame -L<line>,<line>`.
+規約は `ponytail: <限界>, <見直す条件>` です。commentからそのまま抽出します。ownerも必要なら `git blame -L<line>,<line>` を追加します。
 
-Flag the rot risk: any `ponytail:` comment that names no upgrade path or
-trigger gets a `no-trigger` tag, those are the ones that silently rot.
+見直す条件やtriggerがない`ponytail:` commentには `no-trigger` tagを付けます。放置されやすいのはこの項目です。
 
-End with `<N> markers, <M> with no trigger.` Nothing found: `No ponytail: debt. Clean ledger.`
+最後に `<N> markers, <M> with no trigger.` と書きます。見つからなければ `No ponytail: debt. Clean ledger.`
 
-## Boundaries
+## 境界
 
-Reads and reports only, changes nothing. To persist it, ask and it writes the
-ledger to a file (e.g. `PONYTAIL-DEBT.md`). One-shot. "stop ponytail-debt" or
-"normal mode" to revert.
+読み取りとreportだけを行い、codeは変更しません。保存を依頼された場合だけ、`PONYTAIL-DEBT.md`などへ書き出します。一回限り。「stop ponytail-debt」または「normal mode」で戻ります。
