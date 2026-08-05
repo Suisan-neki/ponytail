@@ -13,9 +13,9 @@ function stripFrontmatter(text) {
 }
 
 const agents = read('AGENTS.md');
-const canonical = agents.replace(/\n\n\(Yes, this file also applies[\s\S]*?\)$/, '').trim();
+const canonical = agents.replace(/\n\n（このファイルは[\s\S]*?）$/, '').trim();
 
-// Compact copies: same body as AGENTS.md, host-specific frontmatter stripped.
+// Compact copies: AGENTS.mdと同じ本文。host固有のfrontmatterだけ除外する。
 const copies = [
   ['.cursor/rules/ponytail.mdc', stripFrontmatter],
   ['.windsurf/rules/ponytail.md', text => text.trim()],
@@ -36,25 +36,18 @@ for (const [relPath, normalize] of copies) {
   }
 }
 
-// SKILL.md is the runtime source of truth and is longer than the compact body,
-// so it cannot be byte-compared. ponytail: canary, not full equality. Assert the
-// load-bearing rules survive verbatim in both the source and AGENTS.md. Changing
-// a rule's wording trips this, which is the reminder to propagate it everywhere.
-// Upgrade path: generate the copies from SKILL.md if this ever misses a real drift.
+// SKILL.mdはruntimeのsource of truthで、compact bodyより長いためbyte比較はしない。
+// 代わりに、重要なruleがSKILL.mdとAGENTS.mdの両方に残っていることを確認する。
 const INVARIANTS = [
-  'in this codebase',                      // ladder rung: reuse what already exists (#217)
-  'naive heuristic',                       // ceiling-comment rule
-  'ONE runnable check',                    // test reflex
-  'flimsier algorithm',                    // robust-variant rule
-  // the four "not lazy about" safety carve-outs: pin each so a reword in either
-  // file can't silently drop one. Only validation was pinned before. These are the
-  // continuous substrings present in both files ("prevents data loss" because the
-  // full "error handling that prevents data loss" wraps a line in SKILL.md).
-  'input validation at trust boundaries',
-  'prevents data loss',
-  'security',
-  'accessibility',
-  'Lazy code without its check is unfinished', // one-check promoted to headline
+  'このコードベースにすでにある',
+  '単純なヒューリスティック',
+  '実行可能な確認を1つ',
+  '壊れやすい方',
+  '信頼境界での入力検証',
+  'データ損失を防ぐエラーハンドリング',
+  'セキュリティ',
+  'アクセシビリティ',
+  '確認のない最小コードは未完成',
 ];
 
 const skill = read('skills/ponytail/SKILL.md');
@@ -69,7 +62,7 @@ for (const phrase of INVARIANTS) {
 }
 
 if (failed) {
-  console.error('Update the copied rule text, AGENTS.md, or SKILL.md so the shared rules match.');
+  console.error('Copied rule text、AGENTS.md、SKILL.mdを更新し、共有ruleを一致させてください。');
   process.exit(1);
 }
 
