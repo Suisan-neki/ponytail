@@ -1,47 +1,37 @@
 ---
 name: ponytail-gain
-description: "Show ponytail measured impact as a scoreboard: less code, less cost, more speed, from the benchmark medians. One-shot display."
-homepage: https://github.com/DietrichGebert/ponytail
+description: "公開benchmarkに基づくcode量、cost、速度への効果をscoreboardで示す一回限りの表示。"
+homepage: https://github.com/Suisan-neki/ponytail
 license: MIT
 ---
 
 # Ponytail Gain
 
-Display this scoreboard when invoked. One-shot: do NOT change mode, write flag
-files, or persist anything.
+呼び出されたら次のscoreboardを表示します。一回限りで、mode変更、flag fileの作成、状態の永続化は行いません。
 
-The figures are the published benchmark medians (5 everyday tasks: email
-validator, debounce, CSV sum, countdown timer, rate limiter; three models:
-Haiku, Sonnet, Opus). They are measured, not computed from the current repo.
-Source: `benchmarks/` and the README.
+数値は公開benchmarkのmedianです。日常的な5task（email validator、debounce、CSV sum、countdown timer、rate limiter）を、Haiku、Sonnet、Opusの3modelで測定したものです。現在のrepositoryから計算した数値ではありません。出典は`benchmarks/`とREADMEです。
 
 ## Scoreboard
 
-Render plain ASCII bars. The bar length shows the measured range; the label
-carries the exact figure:
+plain ASCII barで表示します。barの長さは測定範囲、labelは正確な数値です。
 
 ```
   ponytail gain                     benchmark median · 5 tasks · 3 models
 
-  Lines of code   no-skill  ████████████████████  100%
+  コード行数       no-skill  ████████████████████  100%
                   ponytail  ██▌·················    6–20%   ▼ 80–94%
   Cost            no-skill  ████████████████████  100%
                   ponytail  █████▌··············   23–53%  ▼ 47–77%
   Speed           ponytail  ▸ 3–6× faster
 
-  This repo:  /ponytail-debt  (shortcuts you deferred)
-              /ponytail-audit (what's still cuttable)
+  このrepo:  /ponytail-debt  （先送りしたshortcut）
+             /ponytail-audit （まだ削れるもの）
 ```
 
-## Honesty boundary
+## 誠実さの境界
 
-These are benchmark medians, not this repo. NEVER print a per-repo savings
-number ("you saved X lines/tokens here"): the unbuilt version was never
-written, so there is no real baseline to subtract from in a live repo. The
-only real per-repo figures come from `/ponytail-debt` (a counted ledger), and
-this card points there instead of inventing one.
+これはbenchmarkのmedianであり、現在のrepositoryの数値ではありません。「このrepoでX行／X token削減した」のような値を出さないでください。作らなかった版は存在せず、比較するbaselineがないためです。repositoryごとに数えられる実値は`/ponytail-debt`のledgerだけです。
 
-## Boundaries
+## 境界
 
-One-shot display. Edits nothing, changes no mode.
-"stop ponytail" or "normal mode": revert.
+一回限りの表示。fileを編集せず、modeも変更しません。「stop ponytail」または「normal mode」で通常状態へ戻ります。
